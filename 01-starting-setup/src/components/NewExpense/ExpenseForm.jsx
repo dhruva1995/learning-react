@@ -23,7 +23,7 @@ const ExpenseForm = (props) => {
     const newExpense = {
       title: state.enteredTitle,
       date: new Date(state.enteredDate),
-      amount: state.enteredAmount,
+      amount: Number(state.enteredAmount),
     };
     props.onSaveNewExpense(newExpense);
     setState({
@@ -68,7 +68,9 @@ const ExpenseForm = (props) => {
           />
         </div>
       </div>
+
       <div className="new-expense__actions">
+        <button onClick={props.removeForm}>Cancel</button>
         <button type="submit">Add Expense</button>
       </div>
     </form>
