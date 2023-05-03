@@ -22,9 +22,12 @@ function App() {
       date: new Date(2021, 5, 12),
     },
   ];
+  const addNewExpense = (expense) => {
+    console.log(expense);
+  };
   return (
     <div>
-      <NewExpense></NewExpense>
+      <NewExpense onAddExpense={addNewExpense}></NewExpense>
       <Expenses expenses={expenses} />
     </div>
   );
