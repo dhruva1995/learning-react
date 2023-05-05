@@ -1,4 +1,5 @@
 import React, { FormEvent } from "react";
+import Wrapper from "../Helpers/Wrapper";
 import Button from "../UI/Button";
 import Card from "../UI/Card";
 import ErrorModal from "../UI/ErrorModal";
@@ -62,7 +63,7 @@ const AddUser: React.FC<{ onAddUser: (user: UserInput) => void }> = (props) => {
   };
 
   return (
-    <div>
+    <Wrapper>
       {error && (
         <ErrorModal
           message={error!.message}
@@ -92,7 +93,7 @@ const AddUser: React.FC<{ onAddUser: (user: UserInput) => void }> = (props) => {
           <Button type="submit">Submit</Button>
         </form>
       </Card>
-    </div>
+    </Wrapper>
   );
 };
 
