@@ -6,37 +6,21 @@ import ErrorModal from "../UI/ErrorModal";
 import { ModalError, UserInput } from "../models/models";
 import styles from "./AddUser.module.css";
 
-const DEFAULT_USER_INPUT: UserInput = {
-  userName: "",
-  age: "",
-};
-
 const AddUser: React.FC<{ onAddUser: (user: UserInput) => void }> = (props) => {
-  const [userInput, setUserInput] =
-    React.useState<UserInput>(DEFAULT_USER_INPUT);
-
+  const userNameInputRef = React.useRef<HTMLInputElement>(null);
+  const ageInputRef = React.useRef<HTMLInputElement>(null);
   const [error, setError] = React.useState<ModalError | null>(null);
-
-  const userNameChangeHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const updatedState: UserInput = {
-      ...userInput,
-      userName: event.target.value,
-    };
-    setUserInput(updatedState);
-  };
-
-  const ageChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserInput((prev) => ({
-      ...prev,
-      age: event.target.value,
-    }));
-  };
 
   const formSumitHandler = (event: FormEvent) => {
     event.preventDefault();
-    if (userInput.userName.trim().length === 0 || userInput.age.length === 0) {
+    const userInput: UserInput = {
+      userName: userNameInputRef.current?.value || "",
+      age: ageInputRef.current?.value || "",
+    };
+    if (
+      userInput.userName.trim().length === 0 ||
+      userInput.age.trim().length === 0
+    ) {
       // TODO: Need to throw an Error to the user
       setError({
         title: "Invalid input",
@@ -53,9 +37,10 @@ const AddUser: React.FC<{ onAddUser: (user: UserInput) => void }> = (props) => {
       return;
     }
 
-    console.log("Submitted form for ", userInput);
     props.onAddUser({ ...userInput });
-    setUserInput(DEFAULT_USER_INPUT);
+
+    userNameInputRef.current!.value = "";
+    ageInputRef.current!.value = "";
   };
 
   const onModalCancel = () => {
@@ -74,12 +59,7 @@ const AddUser: React.FC<{ onAddUser: (user: UserInput) => void }> = (props) => {
       <Card className={styles.input}>
         <form onSubmit={formSumitHandler}>
           <label htmlFor="username">User name</label>
-          <input
-            type="text"
-            id="username"
-            onChange={userNameChangeHandler}
-            value={userInput.userName}
-          />
+          <input type="text" id="username" ref={userNameInputRef} />
           <label htmlFor="age">Age (Years)</label>
           <input
             type="number"
@@ -87,8 +67,7 @@ const AddUser: React.FC<{ onAddUser: (user: UserInput) => void }> = (props) => {
             id="age"
             min={0}
             max={120}
-            onChange={ageChangeHandler}
-            value={userInput.age}
+            ref={ageInputRef}
           />
           <Button type="submit">Submit</Button>
         </form>
