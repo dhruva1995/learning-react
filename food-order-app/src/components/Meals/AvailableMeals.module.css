@@ -22,3 +22,9 @@
     transform: translateY(0);
   }
 }
+
+.error-text {
+  color: red;
+  text-align: center;
+  font-size: 0.8rem;
+}

@@ -6,6 +6,7 @@ export type CartContextType = {
   totalAmount: number;
   addItem: (item: CartItem) => void;
   removeItem: (id: string) => void;
+  emptyCart: () => void;
 };
 
 const CartContext = React.createContext<CartContextType>(getDefaultState());
@@ -17,5 +18,6 @@ function getDefaultState(): CartContextType {
     totalAmount: 0,
     addItem: (item) => {},
     removeItem: (id: string) => {},
+    emptyCart: () => {},
   };
 }

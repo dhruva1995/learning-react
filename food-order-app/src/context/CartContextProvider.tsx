@@ -10,6 +10,7 @@ type CartContextState = {
 enum EventType {
   "ADD",
   "REMOVE",
+  "EMPTY_CART",
 }
 
 interface CartItemEvent {
@@ -24,6 +25,10 @@ interface AddEvent extends CartItemEvent {
 interface RemoveEvent extends CartItemEvent {
   id: string;
   type: EventType.REMOVE;
+}
+
+interface EmptyCartEvent extends CartItemEvent {
+  type: EventType.EMPTY_CART;
 }
 
 const DEFAULT_CART_CONTEXT_STATE = { items: [], totalAmount: 0 };
@@ -67,6 +72,8 @@ const CartStateReducer = (
       };
     }
     return { totalAmount: newTotalAmount, items: items };
+  } else if (event.type === EventType.EMPTY_CART) {
+    return DEFAULT_CART_CONTEXT_STATE;
   }
   return DEFAULT_CART_CONTEXT_STATE;
 };
@@ -82,6 +89,9 @@ const CartContextProvider: React.FC<React.PropsWithChildren> = (props) => {
   const removeItemFromCart = (id: string) => {
     cartContextDispatcher({ type: EventType.REMOVE, id: id } as RemoveEvent);
   };
+  const emptyCart = () => {
+    cartContextDispatcher({ type: EventType.EMPTY_CART });
+  };
   return (
     <CartContext.Provider
       value={{
@@ -89,6 +99,7 @@ const CartContextProvider: React.FC<React.PropsWithChildren> = (props) => {
         totalAmount: state.totalAmount,
         addItem: addItemToCart,
         removeItem: removeItemFromCart,
+        emptyCart,
       }}
     >
       {props.children}
