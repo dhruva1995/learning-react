@@ -5,9 +5,18 @@ const cartSlice = createSlice({
   initialState: {
     itemFreq: {},
     totalQuantity: 0,
+    cartChanged: false,
   },
+
   reducers: {
+    initializeCartFromBackend(prevState, action) {
+      prevState.itemFreq = action.payload.itemFreq || {};
+      prevState.totalQuantity = action.payload.totalQuantityc || 0;
+      prevState.cartChanged = false;
+    },
+
     addItemToCart(prevState, action) {
+      prevState.cartChanged = true;
       prevState.totalQuantity++;
       const item = action.payload;
       if (item.id in prevState.itemFreq) {
@@ -24,6 +33,7 @@ const cartSlice = createSlice({
       }
     },
     removeItemFromCart(prevState, action) {
+      prevState.cartChanged = true;
       prevState.totalQuantity--;
       const itemId = action.payload;
       const item = prevState.itemFreq[itemId];
